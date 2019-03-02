@@ -56,6 +56,12 @@ int main(){
   get_f("GWprediction.nc");
   cout << f_size << endl;
     
- 
+   // get fast fourier transform
+  
+  fftw_plan p = fftw_plan_dft_1d(f_size,
+                      (fftw_complex*)f.data(), (fftw_complex*)fhat.data(),
+                      FFTW_FORWARD, FFTW_ESTIMATE);
+  fftw_execute(p);
+  fftw_destroy_plan(p); // dont destroy the plan if you are reusing it 
   return 0;
 }
