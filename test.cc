@@ -3,6 +3,6 @@
 #include <iostream>
 #include "test.h"
 void function(){
-  using namespace std
+  using namespace std;
   cout << "good!" << endl;
 }
