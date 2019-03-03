@@ -36,6 +36,44 @@ using namespace netCDF;
 // Fast fourier transform function: performs a fast fourier transform.
 // Input: f rarray
 // Output: fhat rarray
+rarray<complex<double>,1> fft(rarray<complex<double>,1>& f);
+
+// This function returns an rarray of the square norms of the complex values in the rarray input
+rarray<double,1> sq_norm(rarray<complex<double>,1>& fhat);
+
+// This function calculates the correlation between two 1D rarrays via C_FG = <F,G> / sqrt(<F,F><G,G>)
+double correlation(rarray<double,1>& Fk,rarray<double,1>& Gk);
+
+int main(){
+  
+  // Initializing rarrays and constants
+  const int f_size = get_f_size("GWprediction.nc"); // Only need to do this once because f is same size in all files
+  rarray<complex<double>,1> f(f_size); // initialize array to hold f
+  rarray<complex<double>,1> fhat(f_size); // initialize array to hold fhat
+  rarray<double,1> Fk(f_size); // initialize array to hold Fk
+  rarray<double,1> Gk(f_size); // initialize array to hold Gk
+  
+  // Fill f with data from netCDF file
+  f = get_f("GWprediction.nc");
+  // Get fast fourier transform
+  fhat = fft(f);
+  // Get Fk
+  Fk = sq_norm(fhat);
+
+  // Get Gk with same steps, overwriting f and fhat
+  f = get_f("detection01.nc");
+  fhat = fft(f);
+  Gk = sq_norm(fhat);
+  
+  double x = correlation(Fk, Gk);
+  cout << x << endl;
+    
+  return 0;
+}
+
+// Fast fourier transform function: performs a fast fourier transform.
+// Input: f rarray
+// Output: fhat rarray
 rarray<complex<double>,1> fft(rarray<complex<double>,1>& f){
   int f_size = f.extent(0);
   rarray<complex<double>,1> fhat(f_size); // initialize array to hold fhat
@@ -69,31 +107,4 @@ double correlation(rarray<double,1>& Fk,rarray<double,1>& Gk){
   double GG = cblas_ddot(f_size, B, 1, B, 1);
   // C_FG = <F,G> / sqrt(<F,F><G,G>)
   return (FG/(sqrt(FF*GG)));
-}
-
-int main(){
-  
-  // Initializing rarrays and constants
-  const int f_size = get_f_size("GWprediction.nc"); // Only need to do this once because f is same size in all files
-  rarray<complex<double>,1> f(f_size); // initialize array to hold f
-  rarray<complex<double>,1> fhat(f_size); // initialize array to hold fhat
-  rarray<double,1> Fk(f_size); // initialize array to hold Fk
-  rarray<double,1> Gk(f_size); // initialize array to hold Gk
-  
-  // Fill f with data from netCDF file
-  f = get_f("GWprediction.nc");
-  // Get fast fourier transform
-  fhat = fft(f);
-  // Get Fk
-  Fk = sq_norm(fhat);
-
-  // Get Gk with same steps, overwriting f and fhat
-  f = get_f("detection01.nc");
-  fhat = fft(f);
-  Gk = sq_norm(fhat);
-  
-  double x = correlation(Fk, Gk);
-  cout << x << endl;
-    
-  return 0;
 }
