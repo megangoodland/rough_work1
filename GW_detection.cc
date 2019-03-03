@@ -49,19 +49,31 @@ int get_f_size(string s){
   return f_size;
 }
 
-int main(){
- // First, compute fft of the two complex quantities using FFTW
- // Get length of f
-  int f_size = get_f_size("detection01.nc"); // Only need to do this once because f is same size in all files
-  get_f("GWprediction.nc");
-  cout << f_size << endl;
-    
-   // get fast fourier transform
-  
+// Fast fourier transform function: performs a fast fourier transform.
+// Input: f rarray
+// Output: fhat rarray
+rarray<complex<double>,1> fft(rarray<complex<double>,1>& f){
+  int f_size = f.extent(0);
+  rarray<complex<double>,1> fhat(f_size); // initialize array to hold fhat
   fftw_plan p = fftw_plan_dft_1d(f_size,
                       (fftw_complex*)f.data(), (fftw_complex*)fhat.data(),
                       FFTW_FORWARD, FFTW_ESTIMATE);
   fftw_execute(p);
-  fftw_destroy_plan(p); // dont destroy the plan if you are reusing it 
+  fftw_destroy_plan(p);
+  return fhat;
+}
+
+
+int main(){
+ // First, compute fft of the two complex quantities using FFTW
+ // Get length of f
+  const int f_size = get_f_size("GWprediction.nc"); // Only need to do this once because f is same size in all files
+  rarray<complex<double>,1> f(f_size); // initialize array to hold f
+  rarray<complex<double>,1> fhat(f_size); // initialize array to hold fhat
+  f = get_f("GWprediction.nc");
+
+  // get fast fourier transform
+  fhat = fft(f);
+
   return 0;
 }
