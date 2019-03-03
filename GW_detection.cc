@@ -58,7 +58,7 @@ int main(){
   
   double x = correlation(Fk, Gk);
   cout << x << endl;
-  function();
+
     
   return 0;
 }
