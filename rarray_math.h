@@ -5,7 +5,7 @@ void function();
 
 
 //#include <iostream>
-//#include <rarray>
+#include <rarray>
 //#include <rarrayio>
 //#include <vector>
 //#include <netcdf>
@@ -21,10 +21,10 @@ void function();
 // Fast fourier transform function: performs a fast fourier transform.
 // Input: f rarray
 // Output: fhat rarray
-rarray<complex<double>,1> fft(rarray<complex<double>,1>& f);
+rarray<std::complex<double>,1> fft(rarray<std::complex<double>,1>& f);
 
 // This function returns an rarray of the square norms of the complex values in the rarray input
-rarray<double,1> sq_norm(rarray<complex<double>,1>& fhat);
+rarray<double,1> sq_norm(rarray<std::complex<double>,1>& fhat);
 
 // This function calculates the correlation between two 1D rarrays via C_FG = <F,G> / sqrt(<F,F><G,G>)
 double correlation(rarray<double,1>& Fk,rarray<double,1>& Gk);
