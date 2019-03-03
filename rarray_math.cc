@@ -1,7 +1,19 @@
 // rarray_math.cc
 
 #include <iostream>
+#include <rarray>
+//#include <rarrayio>
+//#include <vector>
+//#include <netcdf>
+#include <complex>
+#include <fftw3.h>
+#include <cmath> // for pow
+//#include "netCDF_reading.h"
+#include <cblas.h>
+
+//using namespace netCDF;
 #include "rarray_math.h"
+using namespace std;
 void function(){
   using namespace std;
   cout << "good!" << endl;
