@@ -29,7 +29,7 @@
 #include <fftw3.h>
 #include <cmath> // for pow
 #include "netCDF_reading.h"
-#include "test.h"
+#include "rarray_math.h"
 #include <cblas.h>
 using namespace std;
 using namespace netCDF;
