@@ -65,6 +65,7 @@ int main(){
   rarray<complex<double>,1> f(f_size); // initialize array to hold f
   rarray<complex<double>,1> fhat(f_size); // initialize array to hold fhat
   rarray<double,1> Fk(f_size); // initialize array to hold Fk
+  rarray<double,1> Gk(f_size); // initialize array to hold Gk
   
   // Fill f with data from netCDF file
   f = get_f("GWprediction.nc");
