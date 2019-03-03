@@ -63,17 +63,34 @@ rarray<complex<double>,1> fft(rarray<complex<double>,1>& f){
   return fhat;
 }
 
+// This function returns an rarray of the square norms of the complex values in the rarray input
+rarray<double,1> sq_norm(rarray<complex<double>,1>& fhat){
+  int f_size = fhat.extent(0);
+  rarray<double,1> normsq(f_size);
+  for (int i=0; i<f_size; i++){
+    normsq[i] = pow((norm(fhat[i])),2); // calculate the norm squared for each value, put in new array
+  }
+  return normsq;
+}
+
 
 int main(){
- // First, compute fft of the two complex quantities using FFTW
- // Get length of f
+  
+  // Initializing rarrays and constants
   const int f_size = get_f_size("GWprediction.nc"); // Only need to do this once because f is same size in all files
   rarray<complex<double>,1> f(f_size); // initialize array to hold f
   rarray<complex<double>,1> fhat(f_size); // initialize array to hold fhat
+  rarray<double,1> Fk(f_size); // initialize array to hold Fk
+  
+  // Fill f with data from netCDF file
   f = get_f("GWprediction.nc");
 
-  // get fast fourier transform
+  // Get fast fourier transform
   fhat = fft(f);
 
+  // Get Fk
+  Fk = sq_norm(fhat);
+  cout << Fk[3] << endl;
+    
   return 0;
 }
