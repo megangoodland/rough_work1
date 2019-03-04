@@ -27,6 +27,7 @@
 #include <netcdf>
 #include <complex>
 #include <fftw3.h>
+#include <string>
 #include <cmath> // for pow
 #include "netCDF_reading.h"
 #include "rarray_math.h"
@@ -39,10 +40,12 @@ int main(){
   
   // Initializing rarrays and constants
   const int f_size = get_f_size("GWprediction.nc"); // Only need to do this once because f is same size in all files
+  int n_detections = 32; // number of detections
   rarray<complex<double>,1> f(f_size); // initialize array to hold f
   rarray<complex<double>,1> fhat(f_size); // initialize array to hold fhat
   rarray<double,1> Fk(f_size); // initialize array to hold Fk
   rarray<double,1> Gk(f_size); // initialize array to hold Gk
+  rarray<double,1> C(n_detections); // array to hold correlation values
   
   // Fill f with data from netCDF file
   f = get_f("GWprediction.nc");
@@ -55,6 +58,20 @@ int main(){
   f = get_f("detection01.nc");
   fhat = fft(f);
   Gk = sq_norm(fhat);
+
+  
+  for (int i=0; i<(n_detections); i++){
+    int n = i+1;
+    if (n<10){
+        string filename = "detection0" + to_string(n) + ".nc";
+        cout << filename << endl;
+    }
+    if (n>10){
+        string filename = "detection" + to_string(n) + ".nc";
+        cout << filename << endl;
+    }
+    
+  }
   
   double x = correlation(Fk, Gk);
   cout << x << endl;
