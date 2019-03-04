@@ -66,7 +66,7 @@ int main(){
         string filename = "detection0" + to_string(n) + ".nc";
         cout << filename << endl;
     }
-    if (n>10){
+    if (n>=10){
         string filename = "detection" + to_string(n) + ".nc";
         cout << filename << endl;
     }
