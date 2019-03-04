@@ -64,18 +64,29 @@ int main(){
     int n = i+1;
     if (n<10){
         string filename = "detection0" + to_string(n) + ".nc";
-        cout << filename << endl;
+        // Get Gk with same steps as Fk, overwriting f and fhat
+        f = get_f(filename);
+        fhat = fft(f);
+        Gk = sq_norm(fhat);
+        double x = correlation(Fk, Gk);
+        C[i]=x; // Add to rarray that holds all of the correlation values
     }
     if (n>=10){
         string filename = "detection" + to_string(n) + ".nc";
-        cout << filename << endl;
+        // Get Gk with same steps as Fk, overwriting f and fhat
+        f = get_f(filename);
+        fhat = fft(f);
+        Gk = sq_norm(fhat);
+        double x = correlation(Fk, Gk);
+        C[i]=x; // Add to rarray that holds all of the correlation values
+        
     }
     
   }
   
-  double x = correlation(Fk, Gk);
-  cout << x << endl;
-
+  cout << C << endl;
+  
+  rarray<string,1> files(n_detections); // array to hold filenames
     
   return 0;
 }
